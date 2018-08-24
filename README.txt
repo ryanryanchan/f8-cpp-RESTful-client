@@ -1,4 +1,5 @@
 ** PROJECT README **
+**not allowed to upload code becuase that's probably not ok in a company.
 
 hello. I am writing this as a method of documentation and procrastination 
 because I do not want to move on to the next project. 
