@@ -137,8 +137,9 @@ CREATING THE CLIENT
 	- POST BUILD EVENT:
 		- add a command that copies the dll to your build output directory
 		- that way the system can find the dll if it's not anywhere else in the directory
-		- I added the cpprest_2_10d.ddl here
+		- I added the cpprest_2_10d.ddl in the same folder to appease the dll finding gods
 			(debug dll)
+		- Macro: 'xcopy /y /d "..\..\MathLibrary\$(IntDir)MathLibrary.dll" "$(OutDir)"'
 
 good luck brother. I wish for all your DLL's to compile.
 
