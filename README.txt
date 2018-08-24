@@ -135,11 +135,17 @@ CREATING THE CLIENT
 			- add the path to the YourLibrary.lib file
 			- can use this macro '..\..\MathLibrary\$(IntDir)'
 	- POST BUILD EVENT:
+		- Macro: 'xcopy /y /d "..\..\YourLibrary\$(IntDir)YourLibrary.dll" "$(OutDir)"'
 		- add a command that copies the dll to your build output directory
 		- that way the system can find the dll if it's not anywhere else in the directory
 		- I added the cpprest_2_10d.ddl in the same folder to appease the dll finding gods
 			(debug dll)
-		- Macro: 'xcopy /y /d "..\..\MathLibrary\$(IntDir)MathLibrary.dll" "$(OutDir)"'
+		- dependencies needed in DEBUG folder:
+			cpprest_2_10d.dll
+			boost_date_time-vc141-mt-gd-x32-1_67.dll
+			boost_system-vc141-mt-gd-x32-1_67.dll
+			zlibd1.dll
+			UserLibrary.dll *OR* AdminLibrary.dll		
 
 good luck brother. I wish for all your DLL's to compile.
 
