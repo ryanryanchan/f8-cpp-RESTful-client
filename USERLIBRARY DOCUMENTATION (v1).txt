@@ -6,7 +6,7 @@ And to stall because I don't want to hardcore code right now.
 - Ryan Chan
 
 =============================================================================
-                				FILE STRUCTURE
+                	FILE STRUCTURE
 =============================================================================
 
 Projects: {id, name, active, role(user role within project)}
@@ -40,7 +40,7 @@ Attribute: {id, name, value(optional)}
 
 
 =============================================================================
-                			USERLIBRARY FUNCTIONS
+              	 	USERLIBRARY FUNCTIONS
 =============================================================================
 
 basic usage: UserLibrary.h
@@ -50,7 +50,7 @@ basic usage: UserLibrary.h
 
 
 =============================================================================
-                				CHANGES NEEDED
+                	CHANGES NEEDED
 =============================================================================
 
 - Changing output to another format, not string
