@@ -1,0 +1,56 @@
+ADMINLIBRARY DOCUMENTATION(v1):
+I'm writing this to clearly explain what's going on in the code that I write.
+
+And to stall because I don't want to hardcore code right now.
+
+- Ryan Chan
+
+The admin library is created to let an administrator control 
+who has access to what libraries / project. The admin is able
+to control user activity.
+
+=============================================================================
+                			USERLIBRARY FUNCTIONS
+=============================================================================
+
+basic usage: AdminLibrary.h
+	- all functions are clearly organized and labeled. 
+	- all return strings as of now(8/19/2018).
+
+-----------------------------------------------------------------------------
+
+USERS
+	- get users
+	- create user
+	- delete user
+	- activate/deactivate user
+
+	* USER PERMISSIONS
+		- get user library permission [read-only, read-write]
+		- modify user libary permission
+
+PROJECTS
+	- get projects
+	- create project
+	- rename project
+	- activate/deactivate project
+	- delete project
+
+	* USER PERMISSIONS
+		- get user project permission [read-only, read-write]
+		- modify user project permission
+
+PERMISSIONS
+	- get library permission of each user
+	- modify library permission [read-only, read-write, denied]
+	- get project permission of each user
+	- modify library permission [read-only, read-write, denied]
+
+
+
+=============================================================================
+                				CHANGES NEEDED
+=============================================================================
+
+- Changing output to another format, not string
+- Changing download location to dedicated folder
