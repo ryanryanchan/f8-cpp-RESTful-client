@@ -10,7 +10,7 @@ who has access to what libraries / project. The admin is able
 to control user activity.
 
 =============================================================================
-                			USERLIBRARY FUNCTIONS
+                	USERLIBRARY FUNCTIONS
 =============================================================================
 
 basic usage: AdminLibrary.h
@@ -49,7 +49,7 @@ PERMISSIONS
 
 
 =============================================================================
-                				CHANGES NEEDED
+               		CHANGES NEEDED
 =============================================================================
 
 - Changing output to another format, not string
