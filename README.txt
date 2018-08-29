@@ -7,14 +7,16 @@ because I do not want to move on to the next project.
 the the admin library handles all admin side of the server requests and
 currently outputs strings holding the response and the body of data.
 
+the user library handles all user activity, which is honesetly the bulk of it
+
 in the process of learning and making a dll I ran into 2 big things:
 	- cpprestSDK
 	- making the dll
 
 
-// ====================================================================
-//                           CPPRESTSDK
-// ====================================================================
+===========================================================================
+                              CPPRESTSDK
+===========================================================================
 
 This library uses a library called cpprestsdk (casablanca). 
 documentation here: 
@@ -75,9 +77,62 @@ here are the important ones:
 		- task.get recieves a http_response object
 		- response_to_string is my own function.
 
-// ====================================================================
-//                           DLL
-// ====================================================================
+
+
+=========================================================================================
+                	GENERAL STRUCTURE OF ANY GIVEN FUNCTION:
+=========================================================================================
+
+**these functions heavily use cpprestsdk (casablanca)**
+// Create http_client to send the request.
+	http_client client(baseuri);
+
+//  build body of request
+// methods::GET | methods::POST | methods::PATCH | methods::DEL
+	http_request request(methods::GET);
+
+// builds the rest of the url that you need for the request
+	uri_builder builder(conversions::to_string_t(
+		"/models/" + std::to_string(modelID) + 
+		"/attributes"));
+	request.set_request_uri(builder.to_uri());
+
+//a session header 
+// cookies keep track of who you are in your session
+	if (!m_szSessionToken.empty())
+		request.headers().add(L"Cookie", m_szSessionToken);
+
+// for requests with data in body:
+//specify content type
+	request.headers().add(L"Content-Type", L"application/x-www-form-urlencoded");
+//build the string in urlencoded form
+	string str = "name=" + name + "&value=" + value;
+//set the body
+	request.set_body(str);
+
+
+//send request (or at least try)
+try {
+	//send final request
+	auto task = client.request(request);
+
+	//wait for async task to finish, that way we know all the data is here
+	while (!task.is_done());
+
+	// response_to_string is a helper function that displays all relevant data
+	return response_to_string(task.get());
+}
+//error handling
+catch (const std::exception &e) {
+	printf("Error exception:%s\n", e.what());
+}
+return "";
+
+
+
+===========================================================================
+                                 DLL
+===========================================================================
 
 whoooo man this one hurt to figure out. 
 basically the best resource for making a dll in visual studio 2017 is here:
