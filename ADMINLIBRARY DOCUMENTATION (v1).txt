@@ -53,4 +53,3 @@ PERMISSIONS
 =============================================================================
 
 - Changing output to another format, not string
-- Changing download location to dedicated folder
