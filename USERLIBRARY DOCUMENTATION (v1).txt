@@ -1,0 +1,57 @@
+USERLIBRARY DOCUMENTATION (v1):
+I'm writing this to clearly explain what's going on in the code that I write.
+
+And to stall because I don't want to hardcore code right now.
+
+- Ryan Chan
+
+=============================================================================
+                				FILE STRUCTURE
+=============================================================================
+
+Projects: {id, name, active, role(user role within project)}
+	can hold:
+	- Instance
+	- Models
+	- Folder
+		
+Library: { permission(user permission within library)}
+	can hold:
+	- Models
+	- Folder
+
+Model: {id , name , isfolder, parentfolder}
+	- Attribute (not created in model initialization)
+	- File(s) (not uploaded in model initialization)
+
+Instance: {id, modelID, lat, lng, geom}
+	* linked to project in initialization
+	* linked to model in initialization
+	can hold:
+	- File(s) **technically associated with model
+
+File: { id, name, extension, mediatype, size, date, revision}
+	* holds any kind of file
+	* linked to a model on creation
+
+Attribute: {id, name, value(optional)}
+	* linked to model in initialization
+
+
+
+=============================================================================
+                			USERLIBRARY FUNCTIONS
+=============================================================================
+
+basic usage: UserLibrary.h
+	- all functions are clearly organized and labeled. 
+	- all return strings as of now(8/19/2018).
+
+
+
+=============================================================================
+                				CHANGES NEEDED
+=============================================================================
+
+- Changing output to another format, not string
+- Changing download location to dedicated folder
