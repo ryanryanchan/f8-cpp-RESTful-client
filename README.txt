@@ -148,8 +148,9 @@ std::string boundary = parser.boundary();			// save randomly genarated boundary.
 								// - needed for server to decode. 
 std::string body = parser.GenBodyContent(); 			// generate full body in string form
 
-request.set_body(body, 						// set body, specifying content type
+request.set_body(body,						// set body, specifying content type
 	"multipart/form-data; boundary=" + boundary);
+
 
 
 ---------------------------- code end -----------------------------------------
