@@ -88,27 +88,27 @@ here are the important ones:
 **these functions heavily use cpprestsdk (casablanca)**
 http_client client(baseuri);					// Create http_client to send the request.
 http_request request(methods::GET);				// build body of request
-												// - methods::GET | methods::POST
-												// - methods::PATCH | methods::DEL
-uri_builder builder(conversions::to_string_t(	// builds the rest of the url that 
-												// you need for the request
+								// - methods::GET | methods::POST
+								// - methods::PATCH | methods::DEL
+uri_builder builder(conversions::to_string_t(			// builds the rest of the url that 
+								// you need for the request
 	"/models/" + std::to_string(modelID) + 
 	"/attributes"));
-request.set_request_uri(builder.to_uri());		// sets request
+request.set_request_uri(builder.to_uri());			// sets request
 if (!m_szSessionToken.empty())					// a session header 
 	request.headers()
 	.add(L"Cookie", m_szSessionToken);			// - cookies keep track of who you are 
-												//   in your session
-request.headers().add(L"Content-Type", 			// specify content type for requests 
-	L"application/x-www-form-urlencoded");		// with data in body:
-string str = "name=" + name + "&value=" + value;// build the string in urlencoded form
-request.set_body(str);							// set the body
-try {											// send request (or at least try)
-	auto task = client.request(request);		// send final request
-	while (!task.is_done());					// wait for async task to finish, 
-												// that way we know all the data is here
-	return response_to_string(task.get());		// response_to_string is a helper function
-												// that displays all relevant data
+								//   in your session
+request.headers().add(L"Content-Type", 				// specify content type for requests 
+	L"application/x-www-form-urlencoded");			// with data in body:
+string str = "name=" + name + "&value=" + value;		// build the string in urlencoded form
+request.set_body(str);						// set the body
+try {								// send request (or at least try)
+	auto task = client.request(request);			// send final request
+	while (!task.is_done());				// wait for async task to finish, 
+								// that way we know all the data is here
+	return response_to_string(task.get());			// response_to_string is a helper function
+								// that displays all relevant data
 }
 catch (const std::exception &e) {				// error handling
 	printf("Error exception:%s\n", e.what());
