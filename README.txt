@@ -4,14 +4,16 @@
 hello. I am writing this as a method of documentation and procrastination 
 because I do not want to move on to the next project. 
 
-the the admin library handles all admin side of the server requests and
-currently outputs strings holding the response and the body of data.
+Admin Library:
+	handles all admin side of the server requests and
+	currently outputs strings holding the response and the body of data.
+User Library:
+	handles all user activity, which is honesetly the bulk of it
 
-the user library handles all user activity, which is honesetly the bulk of it
-
-in the process of learning and making a dll I ran into 2 big things:
+In the process of learning and making a dll I ran into 3 big things:
 	- cpprestSDK
 	- making the dll
+	- uploading / downloading binary data
 
 
 ===========================================================================
@@ -84,49 +86,86 @@ here are the important ones:
 =========================================================================================
 
 **these functions heavily use cpprestsdk (casablanca)**
-// Create http_client to send the request.
-	http_client client(baseuri);
-
-//  build body of request
-// methods::GET | methods::POST | methods::PATCH | methods::DEL
-	http_request request(methods::GET);
-
-// builds the rest of the url that you need for the request
-	uri_builder builder(conversions::to_string_t(
-		"/models/" + std::to_string(modelID) + 
-		"/attributes"));
-	request.set_request_uri(builder.to_uri());
-
-//a session header 
-// cookies keep track of who you are in your session
-	if (!m_szSessionToken.empty())
-		request.headers().add(L"Cookie", m_szSessionToken);
-
-// for requests with data in body:
-//specify content type
-	request.headers().add(L"Content-Type", L"application/x-www-form-urlencoded");
-//build the string in urlencoded form
-	string str = "name=" + name + "&value=" + value;
-//set the body
-	request.set_body(str);
-
-
-//send request (or at least try)
-try {
-	//send final request
-	auto task = client.request(request);
-
-	//wait for async task to finish, that way we know all the data is here
-	while (!task.is_done());
-
-	// response_to_string is a helper function that displays all relevant data
-	return response_to_string(task.get());
+http_client client(baseuri);								// Create http_client to send the request.
+http_request request(methods::GET);							// build body of request
+															// - methods::GET | methods::POST | methods::PATCH | methods::DEL
+uri_builder builder(conversions::to_string_t(				// builds the rest of the url that you need for the request
+	"/models/" + std::to_string(modelID) + 
+	"/attributes"));
+request.set_request_uri(builder.to_uri());					// sets request
+if (!m_szSessionToken.empty())								// a session header 
+	request.headers().add(L"Cookie", m_szSessionToken);		// - cookies keep track of who you are in your session
+request.headers().add(L"Content-Type", 						// specify content type for requests with data in body:
+	L"application/x-www-form-urlencoded");		
+string str = "name=" + name + "&value=" + value;			// build the string in urlencoded form
+request.set_body(str);										// set the body
+try {														// send request (or at least try)
+	auto task = client.request(request);					// send final request
+	while (!task.is_done());								// wait for async task to finish, that way we know all the data is here
+	return response_to_string(task.get());					// response_to_string is a helper function that displays all relevant data
 }
-//error handling
-catch (const std::exception &e) {
+catch (const std::exception &e) {							// error handling
 	printf("Error exception:%s\n", e.what());
 }
 return "";
+
+
+
+=============================================================================
+                			UPLOAD / DOWNLOAD
+=============================================================================
+
+UPLOAD:
+- data uploads are in the format of multipart/form-data. 
+- I use a library to handle the full format. 
+	- this is because the body of an upload request
+	  uses the multipart/form-data format.
+	- parser.addFile
+		- add file data to be uploaded. 
+		- takes the name (hardcoded as "file")
+		- takes filename (full location to be specific)
+	- parser.boundary
+		- boundaries seperate one file's data from the next
+		  this allows us to upload several files at once
+		- a randomly generated boundary is made, heightens security
+		- pass this boundary into the header to allow the server to 
+		  be able to decode all of the data
+	- parser.GenBodyContent
+		- returns full body in string form, to be set in request.set_body()
+
+
+---------------------------- code start -----------------------------------------
+MultipartParser parser;                   			 	// declare parser
+for (int i = 0; i < size; i++)		    				// add files, the field is "files"
+	parser.AddFile("file", files[i]); 					// -files[] is an array of file locations on machine.
+std::string boundary = parser.boundary();			    // save randomly genarated boundary. 
+														// - needed for server to decode. 
+std::string body = parser.GenBodyContent(); 			// generate full body in string form
+
+request.set_body(body, 									// set body, specifying content type
+	"multipart/form-data; boundary=" + boundary);
+
+
+---------------------------- code end -----------------------------------------
+
+DOWNLOAD
+- the body of the request is raw byte data. we must take all of this binary data
+  and write it into a file. 
+
+
+---------------------------- code start-----------------------------------------
+
+auto byte_vector = response.extract_vector().get(); 	// returns a vector containing byte data
+std::ofstream output_file(filename,						// prepares the output file. 
+	std::ios::out | std::ios::binary);					// - filename ripped from header of response. 
+														// - ('Content-Disposition')
+
+output_file.write((const char*)&byte_vector[0], 		// writing all bytes into vector. 
+	byte_vector.size());								// - file.write() needs type (const char*)
+output_file.close(); 									// closing files like a good coder. 
+
+
+---------------------------- code end -----------------------------------------
 
 
 
