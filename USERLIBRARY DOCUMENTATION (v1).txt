@@ -47,6 +47,7 @@ basic usage: UserLibrary.h
 	- all functions are clearly organized and labeled. 
 	- all return strings as of now(8/19/2018).
 
+uses multipart_parser library to upload data
 
 
 =============================================================================
