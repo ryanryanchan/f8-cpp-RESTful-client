@@ -141,14 +141,14 @@ UPLOAD:
 
 
 ---------------------------- code start -----------------------------------------
-MultipartParser parser;                   			 	// declare parser
-for (int i = 0; i < size; i++)		    				// add files, the field is "files"
-	parser.AddFile("file", files[i]); 					// -files[] is an array of file locations on machine.
-std::string boundary = parser.boundary();			    // save randomly genarated boundary. 
-														// - needed for server to decode. 
+MultipartParser parser;                   			// declare parser
+for (int i = 0; i < size; i++)		    			// add files, the field is "files"
+	parser.AddFile("file", files[i]); 			// -files[] is an array of file locations on machine.
+std::string boundary = parser.boundary();			// save randomly genarated boundary. 
+								// - needed for server to decode. 
 std::string body = parser.GenBodyContent(); 			// generate full body in string form
 
-request.set_body(body, 									// set body, specifying content type
+request.set_body(body, 						// set body, specifying content type
 	"multipart/form-data; boundary=" + boundary);
 
 
@@ -161,14 +161,14 @@ DOWNLOAD
 
 ---------------------------- code start-----------------------------------------
 
-auto byte_vector = response.extract_vector().get(); 	// returns a vector containing byte data
-std::ofstream output_file(filename,						// prepares the output file. 
-	std::ios::out | std::ios::binary);					// - filename ripped from header of response. 
-														// - ('Content-Disposition')
+auto byte_vector = response.extract_vector().get(); 		// returns a vector containing byte data
+std::ofstream output_file(filename,				// prepares the output file. 
+	std::ios::out | std::ios::binary);			// - filename ripped from header of response. 
+								// - ('Content-Disposition')
 
 output_file.write((const char*)&byte_vector[0], 		// writing all bytes into vector. 
-	byte_vector.size());								// - file.write() needs type (const char*)
-output_file.close(); 									// closing files like a good coder. 
+	byte_vector.size());					// - file.write() needs type (const char*)
+output_file.close(); 						// closing files like a good coder. 
 
 
 ---------------------------- code end -----------------------------------------
