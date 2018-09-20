@@ -248,5 +248,47 @@ CREATING THE CLIENT
 			zlibd1.dll
 			UserLibrary.dll *OR* AdminLibrary.dll		
 
+===========================================================================
+                         INTERNAL DEPENDENCY
+===========================================================================
+
+one of the goals of this project is for the entire application to be easily downloaded
+and run on any computer, anywhere. This is where internal dependency is important. all
+files that you install ucing vcpkg or whatever is put somewhere in your computer, and 
+visual studio is told to look in that location if you ever need the contents of the 
+libraries that you download or whatever. This is what installing is. If you change the
+folder where important files are, or don't have the right libraries installed, you will
+not be able to run your program. This is where you want to have folders within your cpp 
+project holding everything you need. This way, the code is movaple, as long as the main 
+folder is moved entirely. 
+
+This is the folder configuration, as suggested by my senior. 
+
+MAIN
+	\ SOLUTION.sln
+	\ IMPORT
+		\ casablanca
+		\ boost
+	\ LIBRARIES
+		\ UserLibrary
+	\ APP
+
+import: 
+	this is where third party libraries are loaded.
+	this makes it easy to update when needed
+Libraries:
+	this is where your own personal libraries are. 
+	imclude vcxproj file, .h, .cpp
+APP:
+	This is where your main application lives. it uses libraries and imports.
+
+so, after setting things up this way, you can link libraries and dependencies 
+relatively. RELATIVE LINKS WILL NOT BREAK WHEN YOU MOVE THE MAIN FOLDER AROUND. 
+
+now you don't need to install external things to make sure your code works, because
+the project itself will contain everything that it needs!
+
+==========================================================================================
+	
 good luck brother. I wish for all your DLL's to compile.
 
